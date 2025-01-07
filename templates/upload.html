@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIT-Minecraft 文件上传</title>
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: "微软雅黑", Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* 容器样式 */
+        .upload-container {
+            background: #ffffff;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        /* 标题样式 */
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        /* 提示信息 */
+        .messages {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #e0f7fa;
+            color: #00796b;
+            border: 1px solid #00796b;
+            border-radius: 4px;
+        }
+
+        /* 输入文件框 */
+        input[type="file"] {
+            display: block;
+            margin: 20px auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #f9f9f9;
+            font-size: 1rem;
+        }
+
+        /* 上传按钮 */
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* 脚注 */
+        footer {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
+    <script>
+        async function handleFileUpload(event) {
+            event.preventDefault();
+            const formData = new FormData(document.getElementById('uploadForm'));
+            const response = await fetch('/', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            alert(`文件上传成功！新文件名：${result.filename}，文件名只会显示一次，请妥善保存`);
+        }
+    </script>
+</head>
+<body>
+    <div class="upload-container">
+        <h1>SIT-Minecraft 文件上传</h1>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <form id="uploadForm" method="post" enctype="multipart/form-data" onsubmit="handleFileUpload(event)">
+            <input type="file" name="file" id="file" required>
+            <button type="submit">上传</button>
+        </form>
+
+        <footer>
+            <p>支持的文件格式：JPG、PNG、SCHEM、SCHEMATIC</p>
+        </footer>
+    </div>
+</body>
+</html>
